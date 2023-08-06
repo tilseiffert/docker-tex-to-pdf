@@ -1,0 +1,97 @@
+%%
+% Deutsche LaTeX Briefvorlage von Jan-Philip Gehrcke
+% http://gehrcke.de -- jgehrcke@googlemail.com
+% November 2009, Aktualisierung Januar 2013
+%%
+
+\ProvidesFile{ts.lco}[letter-class-option file]
+
+% Symbole: Handy, Telefon, E-Mail
+\RequirePackage{marvosym}
+
+% Der Text in dieser Datei (absender.lco) ist UTF-8 enkodiert
+\RequirePackage[utf8]{inputenc}
+
+% Falls Farben gewuenscht sind...
+\RequirePackage{color}
+
+
+% Erklaerungen zu den Optionen sind in
+% http://www.tex.ac.uk/tex-archive/macros/latex/contrib/koma-script/scrguide.pdf
+% zu finden. Kommentiere aus / deaktiviere, was Du nicht brauchst
+% (z.B. `fromphone`).
+\KOMAoptions{
+    foldmarks=true,
+    fromalign=right,
+    fromrule=aftername,
+    footsepline=on,
+    fromurl=true,
+    fromfax=true,
+    fromemail=true,
+    fromphone=true,
+}
+
+% Der Briefkopf kann z.B. mit `fromrule` (s. KOMAoptions) oder mit Farben
+% und mit speziellen Fonts angepasst werden (teilweise auskommentierte Bespiele
+% s.u.).
+
+
+% So kann man Farben definieren.
+%\definecolor{mygray}{gray}{.55}
+\definecolor{mygray}{gray}{.25}
+\definecolor{myblue}{rgb}{0.25,0.45,0.75}
+\definecolor{from}{rgb}{0.1,0.0,0.1}
+
+
+% Absenderdaten:
+\def\vMobile{\texttt{+49\,12\,/\,34\,56\,789}}
+\def\vMail{mail@example.com}
+\def\vURL{tilseiffert.de}
+\def\vBank
+{
+\footnotesize %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Bankverbindung XXX \\
+\texttt{DE00\,1234\,0000\,1234\,5678\,90}
+\\USt-ID: {DE\,123\,456\,789}
+}
+
+\setkomavar{fromname}{TilSeiffert}
+\setkomavar{fromphone}[]{\vMobile} %\Mobilefone~
+\setkomavar{fromfax}[]{\vMail}
+\setkomavar{fromemail}[]{\vURL\smallskip}
+\setkomavar{fromurl}[]{\vBank}
+
+\def\vNamePrefix{}
+\setkomavar{fromaddress}{
+	\vNamePrefix NAME \\[0.5mm]
+	STREET \\ ZIP CITY \smallskip
+}
+
+\setkomavar{backaddress}{NAME · STREET · ZIP CITY}
+
+
+% logo instead of text
+\def\logo{test-pattern-unspalsh-gd2f3dda77_640}
+\setkomavar{fromname}{\includegraphics[height=\baselineskip]{\logo}}
+
+
+
+%% Optisches:
+%\setkomafont{fromname}{\bfseries\color{black}\LARGE}
+%\setkomafont{fromrule}{\color{black}}
+%\setkomafont{fromaddress}{\small\rmfamily\mdseries\slshape\color{black}}
+\setkomafont{fromname}{\bfseries\color{from}\LARGE}
+\setkomafont{fromrule}{\color{from}}
+\setkomafont{fromaddress}{\small\mdseries\color{from}}
+
+\setkomavar{enclseparator}{}
+
+\setlength{\parindent}{0pt}
+
+\setkomavar{signature}{SIGNATURE-NAME}
+\renewcommand*{\raggedsignature}{\raggedright}
+
+% Definiere vertikalen Abstand vor der Unterschrift
+\@setplength{sigbeforevskip}{1.8cm}
+\endinput
+

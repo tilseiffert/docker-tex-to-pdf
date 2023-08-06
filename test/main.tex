@@ -1,0 +1,83 @@
+% \pdfcompresslevel=0
+
+%%
+% Deutsche LaTeX Briefvorlage von Jan-Philip Gehrcke
+% http://gehrcke.de -- jgehrcke@googlemail.com
+% November 2009, Aktualisierung Januar 2013
+%%
+
+
+% gs -dPDFA -dBATCH -dNOPAUSE -sProcessColorModel=DeviceCMYK -sDEVICE=pdfwrite -sPDFACompatibilityPolicy=1 -sOutputFile=text_pdfa.pdf text.pdf 
+% gs -dPDFA -dBATCH -dNOPAUSE -sProcessColorModel=DeviceRGB -sDEVICE=pdfwrite -sPDFACompatibilityPolicy=1 -sOutputFile=text_pdfa.pdf text.pdf
+% gs -dPDFA -dBATCH -dNOPAUSE -sProcessColorModel=DeviceRGB -sDEVICE=pdfwrite -dPDFACompatibilityPolicy=1 -sOutputFile=text_pdfa.pdf text.pdf
+% gs -dPDFA -dBATCH -dNOPAUSE -sColorConversionStrategy=UseDeviceIndependentColor -sDEVICE=pdfwrite -dPDFACompatibilityPolicy=2 -sOutputFile=text_pdfa.pdf text.pdf
+% gs -sDEVICE=pdfwrite -dPDFA -sColorConversionStrategy=UseDeviceIndependentColor -dPDFACompatibilityPolicy=2 -o text_pdfa.pdf text.pdf
+% gs -sDEVICE=pdfwrite -dPDFA=3 -sColorConversionStrategy=UseDeviceIndependentColor -dPDFACompatibilityPolicy=2 -o text_pdfa.pdf text.pdf
+% gs -sDEVICE=pdfwrite -dPDFA=3 -sColorConversionStrategy=RGB -o text_pdfa.pdf /Users/tilseiffert/GitProjects/tilseiffert/webapp-test/PDF-Test/pdftex-experiments/pdfa_def.ps text.pdf
+% gs -sDEVICE=pdfwrite -dPDFA=3 -sColorConversionStrategy=RGB -o text_pdfa.pdf /Users/tilseiffert/GitProjects/tilseiffert/webapp-test/PDF-Test/pdftex-experiments/pdfa_def.ps text.pdf –permit-file-read=/usr/local/share/ghostscript/9.53.3/iccprofiles/default_rgb.icc
+
+
+
+% gs -sDEVICE=pdfwrite -dPDFA=1 -sColorConversionStrategy=UseDeviceIndependentColor -dPDFACompatibilityPolicy=2 -o text_pdfa1.pdf text.pdf
+% gs -sDEVICE=pdfwrite -dPDFA=3 -sColorConversionStrategy=UseDeviceIndependentColor -dPDFACompatibilityPolicy=2 -o text_pdfa3.pdf text_pdfa1.pdf
+% gs -sDEVICE=pdfwrite -dPDFA=3 -sColorConversionStrategy=UseDeviceIndependentColor -dPDFACompatibilityPolicy=2 -o text_pdfa3_facturx.pdf ./facturx.ps text_pdfa1.pdf
+
+
+\documentclass[
+    test,
+    paper=a4,
+    version=last,
+    fontsize=10pt,
+    DIV=13,
+    BCOR=0mm]{scrlttr2}
+\usepackage[english,ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{csquotes}
+
+% Definiere Grundschrift: sans serif Latin Modern
+\usepackage{lmodern}
+\renewcommand*\familydefault{\sfdefault}
+\usepackage[T1]{fontenc}
+
+\usepackage{wasysym} % für die benutzten Symbole
+\usepackage[normalem]{ulem} %emphasize weiterhin kursiv
+
+% Seitenlayout anpassen:
+\usepackage{changepage}
+%\changepage{text height}{text width}{even-side margin}
+%{odd-side margin}{column sep.}
+%{topmargin}{headheight}{headsep}{footskip}
+\changepage{+3cm}{}{}{}{}{}{}{}{-5cm}
+
+\setlength{\parindent}{0pt}
+
+\usepackage{draftwatermark}
+\SetWatermarkText{}
+\SetWatermarkScale{1}
+
+
+
+
+
+
+
+
+\begin{document}
+
+
+\begin{letter}
+    {
+        COMPANY \\
+        z\,Hd. NAME \\
+        STREET NUMBER \par
+        ZIP CITY
+    }
+    
+    \opening{Greetings,}
+    
+    Text
+    
+    \closing{Wishes}
+    \encl{Noithing}
+    \end{letter}
+\end{document}
