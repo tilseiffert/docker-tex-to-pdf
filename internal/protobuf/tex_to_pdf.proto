@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package tex_to_pdf;
+
+option go_package = "github.com/tilseiffert/docker-tex-to-pdf/internal/protobuf";
+
+// protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative tex_to_pdf.proto
+
+service TexCompiler {
+  rpc CompileToPDF(CompileRequest) returns (CompileReply);
+}
+
+message File {
+  string name = 1;  // the name of the file (e.g. "main.tex")
+  bytes content = 2; // the content of the file (e.g. "\documentclass{article}...")
+}
+
+message CompileRequest {
+  repeated File files = 1; // A list of files. This allows sending TeX files and their corresponding images or other dependencies.
+}
+
+message CompileReply {
+  bytes pdf_content = 1;  // The content of the resulting PDF file
+  string log = 2;         // The log of the compilation process
+}
