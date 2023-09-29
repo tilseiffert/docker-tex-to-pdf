@@ -3,10 +3,7 @@ FROM debian:12-slim
 
 # Install necessary software like texlive-full and ghostscript
 RUN apt-get update && apt-get install -y \
-    texlive-base \
-    texlive \
-    texlive-lang-german \
-    texlive-latex-extra \
+    texlive-full \
     ghostscript \
     rubber \
     && rm -rf /var/lib/apt/lists/*
