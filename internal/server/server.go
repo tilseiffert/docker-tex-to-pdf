@@ -32,9 +32,9 @@ func (s *server) CompileToPDF(ctx context.Context, req *pb.CompileRequest) (*pb.
 	return &pb.CompileReply{PdfContent: pdfContent, Log: logMessage}, nil
 }
 
-// Main starts the gRPC server on the given port
+// Start starts the gRPC server on the given port
 // If port is 0, the standard port 50051 is used
-func Main(port int) (*grpc.Server, error) {
+func Start(port int) (*grpc.Server, error) {
 
 	if port == 0 {
 		port = StandardPort
@@ -44,8 +44,16 @@ func Main(port int) (*grpc.Server, error) {
 	lis, err := net.Listen("tcp", ":"+strconv.Itoa(port))
 
 	if err != nil {
-		return nil, fmt.Errorf("failed create listener: %w", err)
+		lis, err = net.Listen("tcp", "")
+
+		if err != nil {
+			return nil, fmt.Errorf("failed create listener: %w", err)
+		}
 	}
+
+	// if err != nil {
+	// 	return nil, fmt.Errorf("failed create listener: %w", err)
+	// }
 
 	// Create a new gRPC server
 	s := grpc.NewServer()
