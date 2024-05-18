@@ -2,13 +2,18 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"log/slog"
+	"net/http"
 	"os"
-	"time"
 
 	"github.com/rs/zerolog"
+	slogzerolog "github.com/samber/slog-zerolog"
 	"github.com/tilseiffert/docker-tex-to-pdf/internal/contextkeys"
-	"github.com/tilseiffert/docker-tex-to-pdf/internal/server"
+	"github.com/tilseiffert/docker-tex-to-pdf/internal/restserver"
+	server "github.com/tilseiffert/docker-tex-to-pdf/pkg/server"
+	"gorm.io/gorm"
+
+	"github.com/glebarez/sqlite"
 )
 
 // var loggerKey = &contextKey{"logger"}
@@ -34,27 +39,60 @@ func Log(ctx context.Context) *zerolog.Logger {
 	panic("unable to retrieve logger from context")
 }
 
+func RegisterEndpoints(muxer *http.ServeMux) {
+
+	path := "/api/v1/"
+
+	muxer.HandleFunc(path+"ping", func(w http.ResponseWriter, r *http.Request) {
+
+		logger := r.Context().Value("logger").(*slog.Logger)
+		logger.Debug("Hello from /ping handler")
+
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte("pong"))
+	})
+
+	muxer.HandleFunc(path+"health", func(w http.ResponseWriter, r *http.Request) {
+
+		logger := r.Context().Value("logger").(*slog.Logger)
+		logger.Debug("Hello from /health handler")
+
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte("ok"))
+	})
+}
+
 func main() {
 
-	// === Initialize context ===
+	zerologLogger := zerolog.New(zerolog.ConsoleWriter{Out: os.Stderr})
+	logger := slog.New(slogzerolog.Option{Level: slog.LevelDebug, Logger: &zerologLogger}.NewZerologHandler())
+	logger.Debug("Hello World 👋")
 
-	starttime := time.Now()
-
-	// Initialize context
-	ctx := initLogger(context.Background())
-
-	Log(ctx).Debug().Msg("Hello world 👋")
-
-	s, err := server.Start(server.StandardPort)
+	db, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{})
 
 	if err != nil {
-		Log(ctx).Fatal().Err(err).Msg("Error starting server")
+		logger.Error("failed to connect database", "error", err)
 	}
 
-	Log(ctx).Info().Str("serverinfo", fmt.Sprint(s.GetServiceInfo())).Msg("Server started")
+	apiserver, err := restserver.NewServer(db, &restserver.ServerOptions{
+		BUILDDIR_TEMPLATE: "tex-to-pdfa.*.build",
+	})
 
-	// === Tidy up ===
+	if err != nil {
+		logger.Error("failed to create api-server", "error", err)
+	}
 
-	// log runtime
-	Log(ctx).Debug().Str("runtime", time.Since(starttime).String()).Msg("Done 👋")
+	srv := server.NewRestServer(logger)
+
+	opts := server.RestServerOptions{
+		Address:                  "localhost:6204",
+		OptLogReqeust:            true,
+		CallbackEndpointRegister: apiserver.RegisterEndpoints,
+	}
+
+	err = srv.Start(&opts)
+
+	if err != nil {
+		logger.Error("failed to start server", "error", err)
+	}
 }
