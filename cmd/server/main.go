@@ -66,6 +66,7 @@ func main() {
 
 	zerologLogger := zerolog.New(zerolog.ConsoleWriter{Out: os.Stderr})
 	logger := slog.New(slogzerolog.Option{Level: slog.LevelDebug, Logger: &zerologLogger}.NewZerologHandler())
+	logger = logger.With("func", "main").With("logger", "std-slog")
 	logger.Debug("Hello World 👋")
 
 	db, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{})

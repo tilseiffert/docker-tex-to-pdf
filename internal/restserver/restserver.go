@@ -85,6 +85,10 @@ func (srv *Server) RegisterEndpoints(muxer *http.ServeMux) {
 
 	muxer.HandleFunc("POST "+path+"createJob", srv.handleCreateJob)
 
+	muxer.HandleFunc("GET "+path+"job/{id}/status", srv.handleJobStatus)
+
+	muxer.HandleFunc("GET "+path+"job/{id}/result", srv.handleJobGetResult)
+
 	// muxer.HandleFunc("GET "+path+"test", func(w http.ResponseWriter, r *http.Request) {
 
 	// 	logger := r.Context().Value("logger").(*slog.Logger)
