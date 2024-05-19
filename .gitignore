@@ -4,3 +4,5 @@ test/main.fls
 test/main.log
 test/main.pdf
 test/main.synctex.gz
+server
+main

@@ -75,7 +75,7 @@ func main() {
 	}
 
 	apiserver, err := restserver.NewServer(db, &restserver.ServerOptions{
-		BUILDDIR_TEMPLATE: "tex-to-pdfa.*.build",
+		BUILDDIR_PREFIX: "build-tex-to-pdfa",
 	})
 
 	if err != nil {
@@ -85,7 +85,7 @@ func main() {
 	srv := server.NewRestServer(logger)
 
 	opts := server.RestServerOptions{
-		Address:                  "localhost:6204",
+		Address:                  ":6204",
 		OptLogReqeust:            true,
 		CallbackEndpointRegister: apiserver.RegisterEndpoints,
 	}

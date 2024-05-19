@@ -17,7 +17,7 @@ type Server struct {
 }
 
 type ServerOptions struct {
-	BUILDDIR_TEMPLATE string
+	BUILDDIR_PREFIX string
 }
 
 func NewServer(db *gorm.DB, options *ServerOptions) (*Server, error) {

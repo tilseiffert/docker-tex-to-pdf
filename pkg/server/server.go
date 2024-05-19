@@ -69,6 +69,13 @@ func (srv *RestServer) Start(opts *RestServerOptions) error {
 		httpserver.Handler = muxer
 	}
 
-	srv.Logger.Info("starting server on http://" + opts.Address)
+	address := opts.Address
+
+	// if address starts with a colon, prepend localhost
+	if address[0] == ':' {
+		address = "localhost" + address
+	}
+
+	srv.Logger.Info("starting server on http://" + address)
 	return httpserver.ListenAndServe()
 }

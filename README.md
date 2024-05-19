@@ -23,3 +23,10 @@ Simple (but not small) Docker which takes a latex file and compiles and converts
 
 3. Enjoy PDF/A file
     - Final file is put into source-dir named `main.pdf`
+
+
+## DEBUG Server
+
+```
+docker build -t tex-to-pdfa-debug -f Dockerfile.debugserver .
+```

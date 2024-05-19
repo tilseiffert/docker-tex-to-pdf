@@ -1,0 +1,41 @@
+# Schritt 1: Verwenden Sie das offizielle Go-Image zum Kompilieren
+FROM golang:1.22 AS build
+
+# Setzen Sie das Arbeitsverzeichnis innerhalb des Containers
+WORKDIR /app
+
+# Kopieren Sie die Go-Moduldateien und laden Sie die Abhängigkeiten
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Kopieren Sie den Quellcode in das Arbeitsverzeichnis
+COPY . .
+
+# Kompilieren Sie die Go-Anwendung
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /opt/server ./cmd/server
+
+# Überprüfen Sie, ob die Datei erstellt wurde
+RUN ls -l /opt/
+
+# Schritt 2: Verwenden Sie ein minimalistisches Image, um die Anwendung auszuführen
+# FROM alpine:latest
+# # FROM scratch
+FROM tex-to-pdfa-base:12-slim
+
+# Setzen Sie das Arbeitsverzeichnis innerhalb des Containers
+WORKDIR /opt/
+
+# Kopieren Sie die kompilierte Binärdatei aus dem vorherigen Schritt
+COPY --from=build /opt/server ./server
+
+# Stellen Sie sicher, dass die Datei ausführbar ist
+# RUN chmod +x ./server
+
+# RUN ls -l /opt/
+# RUN ls -l /opt/server
+
+# Exponieren Sie den Port, auf dem der Server läuft (optional, abhängig von Ihrer Anwendung)
+EXPOSE 6204
+
+# Starten Sie die Go-Anwendung
+CMD ["/opt/server"]

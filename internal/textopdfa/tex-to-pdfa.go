@@ -60,7 +60,8 @@ func CompileTexToPDFA(ctx context.Context, texfile_name string, builddir_templat
 	}
 
 	if !ok {
-		Log(ctx).Fatal().Msg("Could not assure essential commands, see errors above, aborting...")
+		Log(ctx).Error().Msg("Could not assure essential commands, see errors above, aborting...")
+		return "", fmt.Errorf("could not assure essential commands")
 	}
 
 	Log(ctx).Trace().Msg("All essential commands found")
